@@ -1,4 +1,4 @@
-export async function getAsteroidData(date, apiKey = "DEMO_KEY") {
+export async function getAsteroidData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA") {
   const res = await fetch(
     `https://api.nasa.gov/neo/rest/v1/feed?start_date=${date}&end_date=${date}&api_key=${apiKey}`
   );
