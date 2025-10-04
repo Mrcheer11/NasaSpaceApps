@@ -40,11 +40,11 @@ export async function getAsteroidData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N
   return asteroids;
 }
 
-// Example usage:
-(async () => {
-  const data = await getAsteroidData("2025-09-25", "DEMO_KEY");
 
-  // Now `data` is a real array of objects you can access
-  console.log(data[0].name); // e.g., "(2025 AB)"
-  console.log(data[0].orbit.a); // semi-major axis value
+(async () => {
+  const data = await getAsteroidData("2025-09-25", "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA");
+
+ 
+  console.log(data[0].name); 
+  console.log(data[0].orbit.a); 
 })();
