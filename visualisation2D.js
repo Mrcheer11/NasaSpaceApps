@@ -2,9 +2,10 @@ export class visualisation2D {
     perhelionEarth = 0.983290; //AU
     aEarth = 1.00000; //AU
     bEarth = 0.998987; //AU
-    windowCentreX = 200
-    windowCentreY = 200
-    sunX = this.windowCentreX - (this.aEarth * 100 - this.perhelionEarth * 100);
+    windowCentreX = 200;
+    windowCentreY = 200;
+    scaleLength = 150;
+    sunX = this.windowCentreX - (this.aEarth * this.scaleLength - this.perhelionEarth * this.scaleLength);
     sunY = this.windowCentreY;
 
     drawEarthOrbit(space) {
@@ -12,8 +13,8 @@ export class visualisation2D {
         space.ellipse(
             this.windowCentreX,
             this.windowCentreY,
-            this.aEarth * 100,
-            this.bEarth * 100,
+            this.aEarth * this.scaleLength,
+            this.bEarth * this.scaleLength,
             Math.PI/2,
             0,
             2 * Math.PI
@@ -27,10 +28,10 @@ export class visualisation2D {
 
         space.beginPath();
         space.ellipse(
-            this.sunX + (aNeo - perhelionNeo) * Math.cos(inclinationNeo) * 100,
-            this.sunY + (aNeo - perhelionNeo) * Math.sin(inclinationNeo) * 100,
-            aNeo * 100,
-            aNeo * Math.sqrt(1 - eNeo ** 2) * 100,
+            this.sunX + (aNeo - perhelionNeo) * Math.cos(inclinationNeo) * this.scaleLength,
+            this.sunY + (aNeo - perhelionNeo) * Math.sin(inclinationNeo) * this.scaleLength,
+            aNeo * this.scaleLength,
+            aNeo * Math.sqrt(1 - eNeo ** 2) * this.scaleLength,
             inclinationNeo,
             0,
             2 * Math.PI
@@ -66,6 +67,11 @@ export class visualisation2D {
         )
         space.stroke();
     }
+
+    showMoid(space, moid) {
+        
+    }
+
     visualise2D(aNeo, eNeo, perhelionNeo, inclinationNeo) {
         var Canvas = document.createElement("canvas");
         Canvas.id = "2DVisualisation";
@@ -78,6 +84,6 @@ export class visualisation2D {
         this.drawEarthOrbit(space);
         this.drawSun(space)
         this.drawNeoOrbit(space, aNeo, eNeo, perhelionNeo, inclinationNeo);
-        this.drawMoidLine(space, inclinationNeo, 200)
+        this.drawMoidLine(space, inclinationNeo, 2*this.scaleLength)
     }
 }
