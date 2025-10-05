@@ -1,173 +1,159 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import { or } from 'three/tsl'; //need to check where i will use it 
+import {getAllNeosData, getTopNeos, getNeoDetailsById} from './getAPI.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 20, 60);
+//Camera
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
+camera.position.set(0, 100, 300);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+//renderer
+const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+//controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-//sun
-const SunGeometry =  new THREE.SphereGeometry(6, 32, 32);
-const SunMaterial = new THREE.MeshStandardMaterial({color : 0xffff00, emissive: 0xffff00, emissiveIntensity: 2, roughness : 0.1, metalness : 0});
-const Sun = new THREE.Mesh(SunGeometry, SunMaterial);
-scene.add(Sun);
-
-//lights
-const pointLight = new THREE.PointLight(0xffffff, 2, 0);
-pointLight.position.set(0, 0, 0);
-scene.add(pointLight);
-
-//earth
-const earth = new THREE.Mesh(
-  new THREE.SphereGeometry(2, 32, 32),
-  new THREE.MeshBasicMaterial({ color: 0x0000ff })
-);
-scene.add(earth);
-
-const earthOrbitRadiusX = 15;
-const earthOrbitRadiusZ = 10;
-
-//earth orbit
-function createOrbitLine(a, b, color) {
-  const points = [];
-  for (let i = 0; i <= 64; i++) {
-    const theta = (i / 64) * Math.PI * 2;
-    const x = Math.cos(theta) * a;
-    const z = Math.sin(theta) * b;
-    points.push(new THREE.Vector3(x, 0, z));
-  }
-  const geometry = new THREE.BufferGeometry().setFromPoints(points);
-  const material = new THREE.LineBasicMaterial({ color, opacity: 0.6, transparent: true });
-  return new THREE.LineLoop(geometry, material);
-}
-scene.add(createOrbitLine(earthOrbitRadiusX, earthOrbitRadiusZ, 0x00ff00));
-
-//Stars
+//stars
 function createStarfield(count){
-    const starGeometry = new THREE.BufferGeometry();
-    const positions = [];
-    for (let i=0; i < count; i++){
-        const x = (Math.random() - 0.5) * 800
-        const y = (Math.random () - 0.5) * 800
-        const z = (Math.random () - 0.5) * 800
+  const geometry = new THREE.BufferGeometry();
+  const positions = [];
+  for (let i = 0; i < count; i++){
+    const x = (Math.random() - 0.5) * 800 
+    const y = (Math.random() - 0.5) * 800 
+    const z = (Math.random() - 0.5) * 800 
 
-        positions.push(x, y, z);
-    }
-
-    starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    const starMaterial = new THREE.PointsMaterial({color: 0xffffff, size: 0.5});
-    const points = new THREE.Points(starGeometry, starMaterial);
-    scene.add(points);
+    positions.push(x, y, z);
+  }
+ 
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  const material = new THREE.PointsMaterial({color: 0xffffff, size: 0.5});
+  const points = new THREE.Points(geometry, material);
+  scene.add(points);
 }
-
 createStarfield(2000);
 
+//sun
+const sunGeometry = new THREE.SphereGeometry(6, 32, 32);
+const sunMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0xffff00, emissiveIntensity: 2, roughness: 0.1, metalness: 0});
+const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+scene.add(sun);
 
-let asteroids = [];
+//earth
+const earthGeometry = new THREE.SphereGeometry(5, 32, 32);
+const earthMaterial = new THREE.MeshStandardMaterial({color: 0x1e90ff});
+const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+scene.add(earth);
+
+//lights
+const ambientLight = new THREE.AmbientLight(0x404040, 1);
+scene.add(ambientLight);
 
 
-async function loadAsteroidData() {
-  const res = await fetch(
-    `https://api.nasa.gov/neo/rest/v1/feed?start_date=2025-09-25&end_date=2025-09-26&api_key=DEMO_KEY`
-  );
-  const data = await res.json();
+// meteors Placeholder
 
-  
-  const neos = Object.values(data.near_earth_objects).flat();
 
-  
-  asteroids = neos.map((obj) => {
-    
-    const name = obj.name;
-    const hazardous = obj.is_potentially_hazardous_asteroid;
-    const diameter =
-      (obj.estimated_diameter.kilometers.estimated_diameter_min +
-        obj.estimated_diameter.kilometers.estimated_diameter_max) /
-      2;
-    const velocity = parseFloat(
-      obj.close_approach_data[0].relative_velocity.kilometers_per_second
-    );
-    const missDist = parseFloat(
-      obj.close_approach_data[0].miss_distance.kilometers
-    );
 
-    
-    
-    const a = missDist / 100000; 
-    const b = a * 0.8;           
-    const speed = velocity / 50000; 
+// NASA Data Fetching
+//done in getAPI.js
 
-    
-    const mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(diameter / 100, 16, 16), 
-      new THREE.MeshStandardMaterial({
-        color: hazardous ? 0x39ff14 : 0x87cefa, 
-        emissive: hazardous ? 0x004400 : 0x112244,
-      })
-    );
-    scene.add(mesh);
+// Orbit line creation function
+function drawOrbit(majorearthaxis, minorearthaxis, color = 0xffffff, segments = 128) {
+  const points = [];
 
-    
-    const orbitLine = createOrbitLine(a, b, hazardous ? 0x39ff14 : 0x87cefa);
-    scene.add(orbitLine);
+  for (let i = 0; i <= segments; i++) {
+    const theta = (i / segments) * Math.PI * 2;
+    const x = Math.cos(theta) * majorearthaxis;
+    const z = Math.sin(theta) * minorearthaxis;
 
-    
-    return {
-      name,        
-      hazardous,   
-      diameter,    
-      velocity,    
-      missDist,    
-      orbit: { a, b }, 
-      speed,       
-      angle: Math.random() * Math.PI * 2, 
-      mesh         
-    };
-  });
+    points.push(new THREE.Vector3(x, y, z));
+  }
+
+  const geometry = new THREE.BufferGeometry().setFromPoints(points);
+  const material = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.5 });
+
+  let orbitLine;
+
+  if (open) {
+    orbitLine = new THREE.Line(geometry, material);      // open trajectory (e.g., meteor)
+  } else {
+    orbitLine = new THREE.LineLoop(geometry, material);  // closed orbit (e.g., Earth)
+  }
+  return orbitLine;
 }
 
-loadAsteroidData();
+// Earth orbit (elliptical & tilted slightly)
+const majorearthaxis = 40;
+const minorearthaxis = majorearthaxis * 0.983;
+const orbitSpeed = 0.01;
+
+const earthOrbit = drawOrbit(majorearthaxis, minorearthaxis, 0x00ff00, 256);
+scene.add(earthOrbit);
 
 
-const clock = new THREE.Clock();
+
+//Process Data and Create allNeos
+//not done yet
+const allNeos = [];
+
+function createAllNeos(neosData;
+
+)
+  
+
+
+//not done yet
+// Animation
+
+const timer = new THREE.Timer();
 
 function animate() {
   requestAnimationFrame(animate);
+  const elapsed = timer.getElapsedTime();
 
-  const elapsed = clock.getElapsedTime();
+  // Earth
+  earth.position.x = Math.cos(elapsed * orbitSpeed) * majorearthaxis;
+  earth.position.z = Math.sin(elapsed * orbitSpeed) * minorearthaxis;
+  earth.position.y = Math.sin(axialtilt) * 2;
+  earth.rotation.y += 0.02;
 
-  //Earth orbit
-  const earthSpeed = 0.02;
-  earth.position.x = Math.cos(elapsed * earthSpeed) * earthOrbitRadiusX;
-  earth.position.z = Math.sin(elapsed * earthSpeed) * earthOrbitRadiusZ;
-  earth.rotation.y += 0.05;
-
-  //Asteroids orbit
-  asteroids.forEach((ast) => {
-    ast.angle += ast.speed; // increment angle
-    ast.mesh.position.x = Math.cos(ast.angle) * ast.orbit.a;
-    ast.mesh.position.z = Math.sin(ast.angle) * ast.orbit.b;
+  // allNeos
+  allNeos.forEach(a => {
+    a.angle += a.speed;
+    const x = Math.cos(a.angle) * a.radiusX;
+    const z = Math.sin(a.angle) * a.radiusZ;
+    const y = Math.sin(a.tilt) * 10;
+    a.mesh.position.set(x, y, z);
   });
 
   controls.update();
   renderer.render(scene, camera);
 }
-
 animate();
 
+
+var optionblock = document.getElementById("UserOption");
+var dateblock = document.getElementById("dateInput");
+var button = document.getElementById("button all");
+
+var option = optionblock.value;
+var date = dateblock.value;
+
+button.addEventListener("click", main());
+
+function main (){
+  allNeos = getAllNeosData(date)
+  orbitalData = getTopNeos(allNeos)[option]
+  createAllNeos(orbitalData)
+}
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
-
-//not sure if it runs
