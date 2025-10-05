@@ -1,4 +1,4 @@
-export async function getAsteroidData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA") {
+export async function getAllNeosData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA") {
   const res = await fetch(
     `https://api.nasa.gov/neo/rest/v1/feed?start_date=${date}&end_date=${date}&api_key=${apiKey}`
   );
@@ -6,7 +6,7 @@ export async function getAsteroidData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N
 
   const neos = Object.values(data.near_earth_objects).flat();
 
-  const asteroids = neos.map((obj) => {
+  const allNeos = neos.map((obj) => {
     const name = obj.name;
     const is_hazardous = obj.is_potentially_hazardous_asteroid;
     const diameter =
@@ -37,12 +37,12 @@ export async function getAsteroidData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N
     };
   });
 
-  return asteroids;
+  return allNeos;
 }
 
 
 (async () => {
-  const data = await getAsteroidData("2025-09-25", "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA");
+  const data = await getAllNeosData("2025-09-25", "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA");
 
  
   console.log(data[0].name); 
