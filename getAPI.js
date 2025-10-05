@@ -60,9 +60,35 @@ export function getTopNeos(neos) {
 
 export async function getNeoDetailsById(id, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA") {
   const response = await fetch(`https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=${apiKey}`);
-  const data = await response.json();
+  const data = await response.json(); 
+
+  const orbitData = data.orbital_data;
+  if (orbitData) {
+    const semiMajorAxis = parseFloat(orbitData.semi_major_axis);
+    const eccentricity = parseFloat(orbitData.eccentricity);
+    const semiMinorAxis = semiMajorAxis * Math.sqrt(1 - eccentricity * eccentricity);
+
+    // Try to get velocity for angular speed
+    const approachData = data.close_approach_data?.[0];
+    const velocity = approachData
+      ? parseFloat(approachData.relative_velocity.kilometers_per_second)
+      : 0;
+
+    const angular_speed = velocity / 50000;
+    const angle = Math.random() * Math.PI * 2;
+
+    data.orbit = {
+      semiMajorAxis,
+      semiMinorAxis,
+      eccentricity,
+      angular_speed,
+      angle,
+    };
+  }
+
   return data;
 }
+
 
 
 
