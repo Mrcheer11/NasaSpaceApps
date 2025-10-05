@@ -39,12 +39,3 @@ export async function getAllNeosData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5
 
   return allNeos;
 }
-
-
-(async () => {
-  const data = await getAllNeosData("2025-09-25", "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA");
-
- 
-  console.log(data[0].name); 
-  console.log(data[0].orbit.a); 
-})();
