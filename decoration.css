@@ -69,14 +69,28 @@ body {
     background-size: cover;
 }
 
-label, p, select, button, input {
+p, select, input {
     color: white;
-    font-size: 16px;
+    font-size: 18px;
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid #ffffff33;
     border-radius: 6px;
-    padding: 5px;
+    text-align: center;
+
 }
+
+button {
+    background-color: #6d676795;
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.662);
+    padding: 5px;
+    padding-right: 3px;
+    padding-left: 3px;
+    width: 45px;
+    font-size: 18px;
+}
+
+
 
 .info-box {
     position: fixed;

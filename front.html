@@ -16,21 +16,22 @@
     <title>Document</title>
 </head>
     <body>
-        <p id = "labels">pick a thing</p>
-        <label for="UserOption">Choose an option:</label>
+        <p id = "labels">
+            See the orbital visualisation of the fastest, closest or the largest NEO (Near Earth Object) approaching Earth on a chosen day in both 3D and 2D.
+        </p>
+        <label for="UserOption">Choose an Asteroid:</label>
         <select id = "UserOption">
             <option></option>
             <option value="fastest">Fastest</option>
             <option value="closest">Closest</option>
             <option value="biggest">Biggest</option>
-
-        </select>
+        </select><br>
         <br>
-        <label for="dateInput">Enter date (YYYY-MM-DD):<br></label>
+        <label for="dateInput">Pick a date:</label>
         <input type ="date" id ="dateInput"></input>
 
-        <button type="button" id="enterButton">Visualise 2D</button>
-        <button type="button" id="buttonAll">Submit</button>
+        <button type="button" id="enterButton">2D</button>
+        <button type="button" id="buttonAll">3D</button>
         
         <div id="neoInfo" class="info-box"></div>
         
