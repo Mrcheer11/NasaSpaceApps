@@ -6,19 +6,36 @@ export async function getAllNeosData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5
 
   const neos = Object.values(data.near_earth_objects).flat();
 
+  const browseRes = await fetch(
+    `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${apiKey}`
+  );
+  const browseData = await browseRes.json();
+
+  const orbitLookup = {};
+  for (const obj of browseData.near_earth_objects) {
+    if (obj.orbital_data) {
+      orbitLookup[obj.id] = obj.orbital_data;
+    }
+  }
+
   const allNeos = neos.map((obj) => {
     const name = obj.name;
     const is_hazardous = obj.is_potentially_hazardous_asteroid;
     const diameter =
       (obj.estimated_diameter.kilometers.estimated_diameter_min +
-        obj.estimated_diameter.kilometers.estimated_diameter_max) / 2;
+        obj.estimated_diameter.kilometers.estimated_diameter_max) /
+      2;
 
     const approach = obj.close_approach_data[0];
     const velocity = parseFloat(approach.relative_velocity.kilometers_per_second);
     const miss_dist = parseFloat(approach.miss_distance.kilometers);
 
-    const a = miss_dist / 100000; // scaled orbit size
-    const b = a * 0.8;
+    // Get semi-major axis and eccentricity from browse data if available
+    const orbitData = orbitLookup[obj.id];
+    const a = orbitData ? parseFloat(orbitData.semi_major_axis) : miss_dist / 100000;
+    const e = orbitData ? parseFloat(orbitData.eccentricity) : 0.2;
+    const b = a * Math.sqrt(1 - e * e);
+
     const angular_speed = velocity / 50000;
     const angle = Math.random() * Math.PI * 2;
 
@@ -47,26 +64,21 @@ export function getTopNeos(neos) {
   }
 
   // Find closest to Earth (smallest miss distance)
-  const closest = neos.reduce((a, b) =>
-    a.miss_dist_km < b.miss_dist_km ? a : b
-  );
+  const closest = neos.reduce((a, b) => (a.miss_dist_km < b.miss_dist_km ? a : b));
 
   // Find biggest by diameter
-  const biggest = neos.reduce((a, b) =>
-    a.diameter_km > b.diameter_km ? a : b
-  );
+  const biggest = neos.reduce((a, b) => (a.diameter_km > b.diameter_km ? a : b));
 
   // Find fastest by velocity
-  const fastest = neos.reduce((a, b) =>
-    a.velocity_kps > b.velocity_kps ? a : b
-  );
-  
-  const formatInfo = n => ({
+  const fastest = neos.reduce((a, b) => (a.velocity_kps > b.velocity_kps ? a : b));
+
+  const formatInfo = (n) => ({
     name: n.name,
     diameter_km: n.diameter_km.toFixed(3),
     velocity_kps: n.velocity_kps.toFixed(3),
     miss_distance_km: n.miss_dist_km.toFixed(0),
     hazardous: n.is_hazardous,
+    orbit: n.orbit,
   });
 
   return {
