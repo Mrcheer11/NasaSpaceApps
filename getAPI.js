@@ -33,9 +33,9 @@ export async function getAllNeosData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5
 
     // Get semi-major axis and eccentricity from browse data if available
     const orbitData = orbitLookup[obj.id];
-    const a = orbitData ? parseFloat(orbitData.semi_major_axis) : miss_dist / 100000;
-    const e = orbitData ? parseFloat(orbitData.eccentricity) : 0.2;
-    const b = a * Math.sqrt(1 - e * e);
+    const semiMajorAxis = orbitData ? parseFloat(orbitData.semi_major_axis) : miss_dist / 100000;
+    const eccentricity = orbitData ? parseFloat(orbitData.eccentricity) : 0.2;
+    const semiMinorAxis = semiMajorAxis * Math.sqrt(1 - eccentricity * eccentricity);
 
     const angular_speed = velocity / 50000;
     const angle = Math.random() * Math.PI * 2;
@@ -46,9 +46,10 @@ export async function getAllNeosData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5
       diameter_km: diameter,
       velocity_kps: velocity,
       miss_dist_km: miss_dist,
+      eccentricity,
       orbit: {
-        a,
-        b,
+        semiMajorAxis,
+        semiMinorAxis,
         angular_speed,
         angle,
       },
@@ -65,13 +66,13 @@ export function getTopNeos(neos) {
   }
 
   // Find closest to Earth (smallest miss distance)
-  const closest = neos.reduce((a, b) => (a.miss_dist_km < b.miss_dist_km ? a : b));
+  const closest = neos.reduce((semiMajorAxis, semiMinorAxis) => (semiMajorAxis.miss_dist_km < semiMinorAxis.miss_dist_km ? semiMajorAxis : semiMinorAxis));
 
   // Find biggest by diameter
-  const biggest = neos.reduce((a, b) => (a.diameter_km > b.diameter_km ? a : b));
+  const biggest = neos.reduce((semiMajorAxis, semiMinorAxis) => (semiMajorAxis.diameter_km > semiMinorAxis.diameter_km ? semiMajorAxis : semiMinorAxis));
 
   // Find fastest by velocity
-  const fastest = neos.reduce((a, b) => (a.velocity_kps > b.velocity_kps ? a : b));
+  const fastest = neos.reduce((semiMajorAxis, semiMinorAxis) => (semiMajorAxis.velocity_kps > semiMinorAxis.velocity_kps ? semiMajorAxis : semiMinorAxis));
 
   const formatInfo = (n) => ({
     name: n.name,
@@ -103,7 +104,7 @@ document.getElementById("button all").onclick = function() {
                 
                 
             }
-            // need to make sure that the date input is translated to python correctly.(for now its a string yyyy-mm-dd)
+            // need to make sure that the date input is translated to python correctly.(for now its semiMajorAxis string yyyy-mm-dd)
             // the functions should stack on each other so that the output of one function is the input of the next
         };
 
