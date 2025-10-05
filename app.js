@@ -72,7 +72,7 @@ scene.add(sun);
 // Earth
 const earth = new THREE.Mesh(
   new THREE.SphereGeometry(5, 32, 32),
-  new THREE.MeshStandardMaterial({ color: 0x1e90ff })
+  new THREE.MeshBasicMaterial({ color: 0x1e90ff })
 );
 scene.add(earth);
 
