@@ -24,14 +24,16 @@ if (button) {
 
     console.log("Drawing NEO:", reqdNEO.name);
 
-    var existingCanvas = document.getElementById("2DVisualisation");
-    if (existingCanvas) {
-        existingCanvas.remove()
-    }
-
+    document.body.innerHTML = "";
+    document.getElementById
     var visuals = new visualisation2D();
     visuals.visualise2D(aNeo, eNeo, perhelionNeo, inclinationNeo, isHazardous);
-    });
+    var messageToUsers = document.createElement("p");
+    messageToUsers.textContent = "Reload the page if you would like to go back to the 3D visualisation";
+    document.body.appendChild(messageToUsers)
+    }); 
+
+    
 } else {
     console.warn('main2D.js: enterButton not found in document');
 }
