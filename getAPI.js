@@ -89,7 +89,7 @@ export async function getNeoDetailsById(id, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N
   return data;
 }
 
-*document.addEventListener("DOMContentLoaded", () => {
+/*document.addEventListener("DOMContentLoaded", () => {
 const button = document.getElementById("buttonall")
 button.onclick = function() 
 {
@@ -118,7 +118,7 @@ button.onclick = function()
             // need to make sure that the date input is translated to python correctly.(for now its a string yyyy-mm-dd)
             // the functions should stack on each other so that the output of one function is the input of the next
         };});
-        
+        */
 
 
   
