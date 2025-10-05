@@ -52,9 +52,9 @@ export function getTopNeos(neos) {
   });
 
   return {
-    closest: formatInfo(closest),
-    biggest: formatInfo(biggest),
-    fastest: formatInfo(fastest),
+    "closest": formatInfo(closest),
+    "biggest": formatInfo(biggest),
+    "fastest": formatInfo(fastest),
   };
 }
 

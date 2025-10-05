@@ -1,0 +1,50 @@
+body {
+    font-family: 'Courier New', Courier, monospace ;
+   background-image: url("earth.jpg");
+   background-repeat: no-repeat;
+   background-attachment: fixed;
+   background-size: 100% 100%;
+
+}
+
+h1{
+    font-display: block;
+    font-size: 40px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: white;
+    text-align: center;
+}
+
+p{
+    font-family: 'Times New Roman', Times, serif;
+    color: aliceblue;
+    text-align: center;
+    align-content: center;
+    border-style: solid;
+    height: 100px;
+    font-size: 18px;
+
+}
+label{
+    color: aliceblue;
+    font-family: 'Times New Roman', Times, serif;
+    align-items: center;
+}
+
+ol{
+
+    font-family: 'Times New Roman', Times, serif;
+    text-size-adjust: inherit;
+    color: aliceblue;
+    text-align: center;
+}
+
+select{
+    color: aliceblue;
+    width: 180px;
+    height: 40px;
+    text-align: center;
+
+
+
+}
