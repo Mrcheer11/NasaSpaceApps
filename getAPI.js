@@ -88,24 +88,27 @@ export function getTopNeos(neos) {
     fastest: formatInfo(fastest),
   };
 }
-
-document.getElementById("button all").onclick = function() {
+document.addEventListener("DOMContentLoaded", () => {
+const button = document.getElementById("buttonall")
+button.onclick = function() 
+{
+            var date = document.getElementById("dateInput").value;  
             var option = document.getElementById("UserOption").value;
+            //if (!date) {alert("Please enter a date."); return}
+            var neos = getAllNeosData(date);
+            var topNeos = getTopNeos(neos);
+            
             if (option == "Fastest") {
-                fastest;
-                document.getElementById("button all").style.backgroundColor = "red";
-            }
-            else if (option == "Closest") {
-                closest;
-            }
-            else if (option == "Biggest") {
-                biggest;
-                
-                
+                document.getElementById("buttonall").style.backgroundColor = "red";
+                document.getElementById("buttonall").innerHTML = "Fastest NEO: " + topNeos.fastest.name + ", Velocity: " + topNeos.fastest.velocity_kps + " km/s";
+            } 
+            if (option == "Closest"){
+              document.getElementById("buttonall").style.backgroundColor = "blue";
             }
             // need to make sure that the date input is translated to python correctly.(for now its a string yyyy-mm-dd)
             // the functions should stack on each other so that the output of one function is the input of the next
-        };
+        };});
+        
 
 
   

@@ -19,30 +19,10 @@
         <label for="dateInput">Enter date (YYYY-MM-DD):<br></label>
         <input type ="date" id ="dateInput"></input>
         
-        <button type="button" id = "button all">Submit</button>
-        <script>date = document.getElementById("dateInput").value;</script>
+        <button type="button" id = "buttonall">Submit</button>
         
-    <script src ="getAPI.js"></script>
-    <script>document.getElementById("button all").onclick = function() {
-            var option = document.getElementById("UserOption").value;
-            if (option == "Fastest") {
-                document.getElementById("button all").innerHTML = "+";
-            }
-            else if (option == "Closest") {
-                closest;
-            }
-            else if (option == "Biggest") {
-                biggest;
-                
-                
-            }
-            // need to make sure that the date input is translated to python correctly.(for now its a string yyyy-mm-dd)
-            // the functions should stack on each other so that the output of one function is the input of the next
-        };
-
-
-  
-</script>
+    <script src ="getAPI.js" type = "module"></script>
+    
 
     </body>
 </html>
