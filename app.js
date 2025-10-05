@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
-import { or } from 'three/tsl'; //need to check where i will use it 
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'; 
 import {getAllNeosData, getTopNeos, getNeoDetailsById} from './getAPI.js';
 
 const scene = new THREE.Scene();
@@ -54,40 +53,24 @@ scene.add(earth);
 const ambientLight = new THREE.AmbientLight(0x404040, 1);
 scene.add(ambientLight);
 
+const sunLight = new THREE.PointLight(0xffffff, 2, 1000);
+sunLight.position.set(0, 0, 0);
+scene.add(sunLight);
 
-// meteors Placeholder
-
-
-
-// NASA Data Fetching
-//done in getAPI.js
 
 // Orbit line creation function
-function drawOrbit(majorearthaxis, minorearthaxis, color = 0xffffff, segments = 128) {
+function drawOrbit(maj, min, color = 0xffffff, segments = 128, open = false) {
   const points = [];
-
   for (let i = 0; i <= segments; i++) {
     const theta = (i / segments) * Math.PI * 2;
-    const x = Math.cos(theta) * majorearthaxis;
-    const z = Math.sin(theta) * minorearthaxis;
-
-    points.push(new THREE.Vector3(x, y, z));
+    points.push(new THREE.Vector3(Math.cos(theta) * maj, 0, Math.sin(theta) * min));
   }
-
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
   const material = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.5 });
-
-  let orbitLine;
-
-  if (open) {
-    orbitLine = new THREE.Line(geometry, material);      // open trajectory (e.g., meteor)
-  } else {
-    orbitLine = new THREE.LineLoop(geometry, material);  // closed orbit (e.g., Earth)
-  }
-  return orbitLine;
+  return open ? new THREE.Line(geometry, material) : new THREE.LineLoop(geometry, material);
 }
 
-// Earth orbit (elliptical & tilted slightly)
+// Earth orbit
 const majorearthaxis = 40;
 const minorearthaxis = majorearthaxis * 0.983;
 const orbitSpeed = 0.01;
@@ -97,60 +80,84 @@ scene.add(earthOrbit);
 
 
 
-//Process Data and Create allNeos
-//not done yet
 const allNeos = [];
 
-function createAllNeos(neosData;
+function createAllNeos(neo) {
+  const scaleLength = 15;
+  const orbit = neo.orbit;
 
-)
-  
+  if (!orbit) return; // in case orbit data is missing
+
+  const diameter = Math.max(neo.diameter_km * 0.5, 0.5);
+  const color = neo.is_hazardous ? 0xff0000 : 0xffffff;
+
+  const mesh = new THREE.Mesh(
+    new THREE.SphereGeometry(diameter, 12, 12),
+    new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: neo.is_hazardous ? 1 : 0.3 })
+  );
+  scene.add(mesh);
+
+  // Orbit line
+  const orbitLine = drawOrbit(orbit.semiMajorAxis * scaleLength, orbit.semiMinorAxis * scaleLength, color, 256, true);
+  scene.add(orbitLine);
+
+  //animation storage
+  allNeos.push({name: neo.name, mesh, orbitLine, radiusX: orbit.semiMajorAxis * scaleLength, radiusZ: orbit.semiMinorAxis * scaleLength, angle: orbit.angle, speed: orbit.angular_speed * 0.05, tilt: 0});
+}
 
 
-//not done yet
 // Animation
 
-const timer = new THREE.Timer();
+const clock = new THREE.Clock();
 
 function animate() {
   requestAnimationFrame(animate);
-  const elapsed = timer.getElapsedTime();
+  const elapsed = clock.getElapsedTime();
 
-  // Earth
+  // Earth orbit
   earth.position.x = Math.cos(elapsed * orbitSpeed) * majorearthaxis;
   earth.position.z = Math.sin(elapsed * orbitSpeed) * minorearthaxis;
-  earth.position.y = Math.sin(axialtilt) * 2;
   earth.rotation.y += 0.02;
 
-  // allNeos
+  // Animate NEOs
   allNeos.forEach(a => {
     a.angle += a.speed;
-    const x = Math.cos(a.angle) * a.radiusX;
-    const z = Math.sin(a.angle) * a.radiusZ;
-    const y = Math.sin(a.tilt) * 10;
-    a.mesh.position.set(x, y, z);
+    a.mesh.position.set(Math.cos(a.angle) * a.radiusX, 0, Math.sin(a.angle) * a.radiusZ);
   });
 
   controls.update();
   renderer.render(scene, camera);
-}
+} 
 animate();
 
-
-var optionblock = document.getElementById("UserOption");
-var dateblock = document.getElementById("dateInput");
 var button = document.getElementById("button all");
-
-var option = optionblock.value;
-var date = dateblock.value;
 
 button.addEventListener("click", main());
 
-function main (){
-  allNeos = getAllNeosData(date)
-  orbitalData = getTopNeos(allNeos)[option]
-  createAllNeos(orbitalData)
+async function main() {
+
+  var optionblock = document.getElementById("UserOption");
+  var dateblock = document.getElementById("dateInput");
+  allNeos.forEach(a => {
+  scene.remove(a.mesh);
+  scene.remove(a.orbitLine);
+});
+allNeos.length = 0;
+
+  const date = dateblock.value;
+  const option = optionblock.value;
+
+  if (!date || !option) {
+    alert("Please select both a date and an option.");
+    return;
+  }
+
+  const allNeosData = await getAllNeosData(date);
+  const topNeoSummary = getTopNeos(allNeosData)[option.toLowerCase()];
+  const neoDetails = await getNeoDetailsById(topNeoSummary.id);
+  createAllNeos(neoDetails);
 }
+
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
