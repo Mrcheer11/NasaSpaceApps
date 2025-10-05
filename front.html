@@ -7,43 +7,22 @@
     <title>Document</title>
 </head>
     <body>
-        <p>Fastest</p>
+        <p>pick a thing</p>
+        <label for="UserOption">Choose an option:</label>
         <select id = "UserOption">
-            we probably dont need these script tags here
-            <option>Fastest</option>
-            <script>src="filename for calculate fastest"</script>
-            <option>Closest</option>
-            <script>src ="filename for calculate closest"</script>
-            <option>Biggest</option>
-            <script>src="filename for calculate biggest"</script>
             <option></option>
+            <option value = "fastest">Fastest</option>
+            <option value = "closest">Closest</option>
+            <option value = "biggest">Biggest</option>
         </select>
-        <p>Enter date (YYYY-MM-DD):</p>
-
-        <p></p>
+        <br>
+        <label for="dateInput">Enter date (YYYY-MM-DD):<br></label>
         <input type ="date" id ="dateInput"></input>
-   
-        <button type="button" id = "button all">Submit</button>
-        <script>document.getElementById("button all").onclick = function() {
-            var date = document.getElementById("dateInput").value;
-            var option = document.getElementById("UserOption").value;
-            if (option == "Fastest") {
-                //call function for fastest in date (xxxx-xx-xx)
-
-            }
-            else if (option == "Closest") {
-                //call function for closest
-                //in date (xxxx-xx-xx)
-            }
-            else if (option == "Biggest") {
-                //call function for biggest
-                //in date (xxxx-xx-xx)
-                
-            }
-            // need to make sure that the date input is translated to python correctly.(for now its a string yyyy-mm-dd)
-            // the functions should stack on each other so that the output of one function is the input of the next
-        };
-       </script> 
         
+        <button type="button" id = "button all">Submit</button>
+        <script>date = document.getElementById("dateInput").value;</script>
+        
+    <script src ="getAPI.js"></script>
+
     </body>
 </html>
