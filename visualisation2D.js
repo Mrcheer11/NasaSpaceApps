@@ -1,4 +1,10 @@
+import * as THREE from 'https://unpkg.com/three@0.156.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.156.0/examples/jsm/controls/OrbitControls.js';
+
 export class visualisation2D {
+    constructor() {
+        console.log('visualisation2D module loaded');
+    }
     perhelionEarth = 0.983290; //AU
     aEarth = 1.00000; //AU
     bEarth = 0.998987; //AU
@@ -142,6 +148,7 @@ export class visualisation2D {
         Canvas.height = window.innerHeight;
 
         document.body.appendChild(Canvas);
+    console.log('visualisation2D: 2D canvas appended to document.body');
 
         var space = Canvas.getContext("2d");
 

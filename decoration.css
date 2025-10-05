@@ -99,8 +99,8 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;           /* 3D canvas behind everything else */
-  pointer-events: none;  /* allows UI clicks */
+    z-index: 0;            /* 3D canvas sits behind UI but above page background */
+    pointer-events: auto;  /* allow interacting with the 3D scene */
 }
 
 /* UI stays above the 3D scene */
@@ -111,14 +111,15 @@ body *:not(canvas) {
 
 /* Optional: slight dark tint for readability */
 body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 0;
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    /* Put overlay behind the canvas but above page background */
+    z-index: -2;
 }
 body {
   background: radial-gradient(circle at center, #000010 0%, #000000 100%);

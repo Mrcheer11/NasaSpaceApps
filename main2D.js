@@ -1,9 +1,14 @@
 import { getAllNeosData, getTopNeos, getNeoDetailsById } from "./getAPI.js";
-import { visualisation2D } from "./visualisation2D.js";    
+import { visualisation2D } from "./visualisation2D.js";
+import * as THREE from 'https://unpkg.com/three@0.156.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.156.0/examples/jsm/controls/OrbitControls.js';
+
+console.log('main2D.js module loaded');
 
 var button = document.getElementById("enterButton");
 
-button.addEventListener("click", async () => {
+if (button) {
+    button.addEventListener("click", async () => {
     var date = document.getElementById("dateInput").value;
     var option = document.getElementById("UserOption").value;
 
@@ -26,7 +31,10 @@ button.addEventListener("click", async () => {
 
     var visuals = new visualisation2D();
     visuals.visualise2D(aNeo, eNeo, perhelionNeo, inclinationNeo, isHazardous);
-});
+    });
+} else {
+    console.warn('main2D.js: enterButton not found in document');
+}
 
 
 

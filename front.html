@@ -5,6 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="decoration.css">
+        <!-- Import map: resolve bare-specifier imports like "three" used by examples/jsm modules -->
+        <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.156.0/build/three.module.js"
+            }
+        }
+        </script>
     <title>Document</title>
 </head>
     <body>
@@ -26,10 +34,10 @@
         
         <div id="neoInfo" class="info-box"></div>
         
-        <script type="module" src="./getAPI.js"></script>
-        <script type="module" src="./visualisation2D.js"></script>
-        <script type="module" src="./main2D.js"></script>
-        <script type="module" src="./app.js"></script>
+    <!-- getAPI is imported by app/main modules; avoid loading it twice as a top-level module -->
+    <script type="module" src="./visualisation2D.js"></script>
+    <script type="module" src="./main2D.js"></script>
+    <script type="module" src="./app.js"></script>
 </body>
 </html>
 
