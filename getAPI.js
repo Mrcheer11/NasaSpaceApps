@@ -1,4 +1,5 @@
 export async function getAllNeosData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA") {
+
   const res = await fetch(
     `https://api.nasa.gov/neo/rest/v1/feed?start_date=${date}&end_date=${date}&api_key=${apiKey}`
   );
@@ -74,4 +75,24 @@ export function getTopNeos(neos) {
     biggest: formatInfo(biggest),
     fastest: formatInfo(fastest),
   };
+document.getElementById("button all").onclick = function() {
+            var option = document.getElementById("UserOption").value;
+            if (option == "Fastest") {
+                fastest;
+                document.getElementById("button all").style.backgroundColor = "red";
+            }
+            else if (option == "Closest") {
+                closest;
+            }
+            else if (option == "Biggest") {
+                biggest;
+                
+                
+            }
+            // need to make sure that the date input is translated to python correctly.(for now its a string yyyy-mm-dd)
+            // the functions should stack on each other so that the output of one function is the input of the next
+        };
+
+
+  
 }
