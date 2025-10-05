@@ -18,11 +18,66 @@
         <br>
         <label for="dateInput">Enter date (YYYY-MM-DD):<br></label>
         <input type ="date" id ="dateInput"></input>
-        
         <button type="button" id = "buttonall">Submit</button>
         
     <script src ="getAPI.js" type = "module"></script>
-    
+    <pre id="output">Waiting...</pre>
+    <script type="module">
+    import { getAllNeosData, getTopNeos } from './getAPI.js';
 
+    document.addEventListener("DOMContentLoaded", () => {
+      const button = document.getElementById("buttonAll");
+      const dateInput = document.getElementById("dateInput");
+      const select = document.getElementById("UserOption");
+      const output = document.getElementById("output")});
+
+      button.addEventListener("click", async () => {
+        const date = dateInput.value;
+        const option = select.value;
+
+        if (!date) {
+          alert("Please select a date.");
+          return;
+        }
+
+        if (!option) {
+          alert("Please choose an option.");
+          return;
+        }
+
+        output.textContent = "Fetching data from NASA...";
+
+          // Fetch all NEOs for that date
+          const neos = await getAllNeosData(date);
+          const top = getTopNeos(neos);
+
+          let selected;
+          if (option === "Fastest") {
+            selected = top.fastest;
+            button.style.backgroundColor = "red";
+          } else if (option === "Closest") {
+            selected = top.closest;
+            button.style.backgroundColor = "green";
+          } else if (option === "Biggest") {
+            selected = top.biggest;
+            button.style.backgroundColor = "blue";
+          } if (!selected)
+          {
+            output.textContent = "No NEO data available for the selected date.";
+            return;
+          }});
+        
+        // Display formatted info
+        output.textContent = `
+ Date: ${date}
+ Option: ${option}
+
+Name: ${selected.name}
+Diameter: ${selected.diameter_km} km
+Velocity: ${selected.velocity_kps} km/s
+Miss Distance: ${selected.miss_distance_km} km
+Hazardous: ${selected.hazardous ? "⚠️ Yes" : "No"}
+`
+        </script>
     </body>
 </html>

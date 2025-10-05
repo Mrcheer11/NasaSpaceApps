@@ -57,29 +57,6 @@ export function getTopNeos(neos) {
     fastest: formatInfo(fastest),
   };
 }
-<<<<<<< HEAD
-document.addEventListener("DOMContentLoaded", () => {
-const button = document.getElementById("buttonall")
-button.onclick = function() 
-{
-            var date = document.getElementById("dateInput").value;  
-            var option = document.getElementById("UserOption").value;
-            //if (!date) {alert("Please enter a date."); return}
-            var neos = getAllNeosData(date);
-            var topNeos = getTopNeos(neos);
-            
-            if (option == "Fastest") {
-                document.getElementById("buttonall").style.backgroundColor = "red";
-                document.getElementById("buttonall").innerHTML = "Fastest NEO: " + topNeos.fastest.name + ", Velocity: " + topNeos.fastest.velocity_kps + " km/s";
-            } 
-            if (option == "Closest"){
-              document.getElementById("buttonall").style.backgroundColor = "blue";
-            }
-            // need to make sure that the date input is translated to python correctly.(for now its a string yyyy-mm-dd)
-            // the functions should stack on each other so that the output of one function is the input of the next
-        };});
-        
-=======
 
 export async function getNeoDetailsById(id, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5v20SBn4KpD0iA") {
   const response = await fetch(`https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=${apiKey}`);
@@ -112,9 +89,41 @@ export async function getNeoDetailsById(id, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N
   return data;
 }
 
+*document.addEventListener("DOMContentLoaded", () => {
+const button = document.getElementById("buttonall")
+button.onclick = function() 
+{
 
 
->>>>>>> bd1b7158743787f2b9fdcaf6a5fc83d3bdcf0dbd
+            var date = document.getElementById("dateInput").value;  
+            var option = document.getElementById("UserOption").value;
+            var output = document.getElementById("output");
+            //if (!date) {alert("Please enter a date."); return}
+            var neos = getAllNeosData(date);
+            var topNeos = getTopNeos(neos);
+            let selected;
+            if (option == "Fastest") {
+              selected = topNeos.fastest;
+              document.getElementById("buttonall").style.backgroundColor = "red";
+             
+            } 
+            if (option == "Closest"){
+              selected = topNeos.closest;
+              document.getElementById("buttonall").style.backgroundColor = "blue";
+            }
+            if (option == "Biggest"){
+              selected = topNeos.biggest;
+            }
+            output.textContent = `"Date ${date}\nOption: ${option}\nName: ${selected.name}\nDiameter (km): ${selected.diameter_km}\nVelocity (km/s): ${selected.velocity_kps}\nMiss Distance (km): ${selected.miss_distance_km}\nHazardous: ${selected.hazardous}`;
+            // need to make sure that the date input is translated to python correctly.(for now its a string yyyy-mm-dd)
+            // the functions should stack on each other so that the output of one function is the input of the next
+        };});
+        
+
+
+  
+
+
 
 
   
