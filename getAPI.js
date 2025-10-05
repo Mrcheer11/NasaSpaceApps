@@ -87,6 +87,8 @@ export function getTopNeos(neos) {
     biggest: formatInfo(biggest),
     fastest: formatInfo(fastest),
   };
+
+
 document.getElementById("button all").onclick = function() {
             var option = document.getElementById("UserOption").value;
             if (option == "Fastest") {
