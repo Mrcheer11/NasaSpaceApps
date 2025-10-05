@@ -39,3 +39,38 @@ export async function getAllNeosData(date, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N5
 
   return allNeos;
 }
+
+export function getTopNeos(neos) {
+  if (!Array.isArray(neos) || neos.length === 0) {
+    console.log("No NEO data available.");
+    return null;
+  }
+
+  // Find smallest and biggest by diameter
+  const smallest = neos.reduce((a, b) =>
+    a.diameter_km < b.diameter_km ? a : b
+  );
+
+  const biggest = neos.reduce((a, b) =>
+    a.diameter_km > b.diameter_km ? a : b
+  );
+
+  // Find fastest by velocity
+  const fastest = neos.reduce((a, b) =>
+    a.velocity_kps > b.velocity_kps ? a : b
+  );
+  
+  const formatInfo = n => ({
+    name: n.name,
+    diameter_km: n.diameter_km.toFixed(3),
+    velocity_kps: n.velocity_kps.toFixed(3),
+    miss_distance_km: n.miss_dist_km.toFixed(0),
+    hazardous: n.is_hazardous,
+  });
+
+  return {
+    smallest: formatInfo(smallest),
+    biggest: formatInfo(biggest),
+    fastest: formatInfo(fastest),
+  };
+}
