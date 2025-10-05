@@ -46,11 +46,12 @@ export function getTopNeos(neos) {
     return null;
   }
 
-  // Find smallest and biggest by diameter
-  const smallest = neos.reduce((a, b) =>
-    a.diameter_km < b.diameter_km ? a : b
+  // Find closest to Earth (smallest miss distance)
+  const closest = neos.reduce((a, b) =>
+    a.miss_dist_km < b.miss_dist_km ? a : b
   );
 
+  // Find biggest by diameter
   const biggest = neos.reduce((a, b) =>
     a.diameter_km > b.diameter_km ? a : b
   );
@@ -69,7 +70,7 @@ export function getTopNeos(neos) {
   });
 
   return {
-    smallest: formatInfo(smallest),
+    closest: formatInfo(closest),
     biggest: formatInfo(biggest),
     fastest: formatInfo(fastest),
   };
