@@ -84,29 +84,13 @@ export function getTopNeos(neos) {
   });
 
   return {
-    closest: formatInfo(closest),
-    biggest: formatInfo(biggest),
-    fastest: formatInfo(fastest),
+    "closest": formatInfo(closest),
+    "biggest": formatInfo(biggest),
+    "fastest": formatInfo(fastest),
   };
 }
 
-document.getElementById("button all").onclick = function() {
-            var option = document.getElementById("UserOption").value;
-            if (option == "Fastest") {
-                fastest;
-                document.getElementById("button all").style.backgroundColor = "red";
-            }
-            else if (option == "Closest") {
-                closest;
-            }
-            else if (option == "Biggest") {
-                biggest;
-                
-                
-            }
-            // need to make sure that the date input is translated to python correctly.(for now its semiMajorAxis string yyyy-mm-dd)
-            // the functions should stack on each other so that the output of one function is the input of the next
-        };
+
 
 
   
