@@ -1,6 +1,8 @@
-import * as THREE from 'three';
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'; 
-import {getAllNeosData, getTopNeos, getNeoDetailsById} from './getAPI.js';
+import * as THREE from "https://unpkg.com/three@0.165.0/build/three.module.js";
+import { OrbitControls } from "https://unpkg.com/three@0.165.0/examples/jsm/controls/OrbitControls.js";
+
+import { getAllNeosData, getTopNeos, getNeoDetailsById } from "./getAPI.js";
+
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
@@ -130,9 +132,8 @@ function animate() {
 } 
 animate();
 
-var button = document.getElementById("button all");
-
-button.addEventListener("click", main());
+var button = document.getElementById("buttonAll");
+button.addEventListener("click", main);
 
 async function main() {
 

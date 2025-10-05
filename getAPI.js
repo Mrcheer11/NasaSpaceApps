@@ -88,48 +88,6 @@ export async function getNeoDetailsById(id, apiKey = "pWBIQYyI27c1H9lcl3AlxW1b8N
   return data;
 }
 
-// Wait until DOM is loaded
-document.addEventListener("DOMContentLoaded", () => {
-  const button = document.getElementById("button all");
-  const optionSelect = document.getElementById("UserOption");
-  const dateInput = document.getElementById("dateInput");
 
-  button.addEventListener("click", async () => {
-    const date = dateInput.value;
-    const option = optionSelect.value;
-
-    if (!date || !option) {
-      alert("Please select both a date and an option.");
-      return;
-    }
-
-    try {
-      const neos = await getAllNeosData(date);
-      const top = getTopNeos(neos);
-
-      let selectedNeo;
-      if (option === "Fastest") selectedNeo = top.fastest;
-      else if (option === "Closest") selectedNeo = top.closest;
-      else if (option === "Biggest") selectedNeo = top.biggest;
-
-      const details = await getNeoDetailsById(selectedNeo.id);
-
-      // Display basic info in browser
-      alert(
-        `Name: ${details.name}\n` +
-        `Velocity: ${selectedNeo.velocity_kps} km/s\n` +
-        `Diameter: ${selectedNeo.diameter_km} km\n` +
-        `Miss Distance: ${selectedNeo.miss_distance_km} km\n` +
-        `Eccentricity: ${details.orbit?.eccentricity}\n` +
-        `Semi-Major Axis: ${details.orbit?.semiMajorAxis}`
-      );
-
-      console.log("Full details:", details);
-    } catch (error) {
-      console.error(error);
-      alert("Error fetching data from NASA API.");
-    }
-  });
-});
 
 

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="decoration.css">
     <title>Document</title>
 </head>
     <body>
@@ -11,24 +12,24 @@
         <label for="UserOption">Choose an option:</label>
         <select id = "UserOption">
             <option></option>
-            <option value = "Fastest">Fastest</option>
-            <option value = "Closest">Closest</option>
-            <option value = "Biggest">Biggest</option>
+            <option value="fastest">Fastest</option>
+            <option value="closest">Closest</option>
+            <option value="biggest">Biggest</option>
+
         </select>
         <br>
         <label for="dateInput">Enter date (YYYY-MM-DD):<br></label>
         <input type ="date" id ="dateInput"></input>
+
+        <button type="button" id="enterButton">Visualise 2D</button>
+        <button type="button" id="buttonAll">Submit</button>
         
-        <button type="button" id = "button all">Submit</button>
+        <div id="neoInfo" class="info-box"></div>
         
-        <script type="module" src="getAPI.js"></script>
-        <script type="module" src="app.js">
-            
-
-
-
-  
-</script>
-
-    </body>
+        <script type="module" src="./getAPI.js"></script>
+        <script type="module" src="./visualisation2D.js"></script>
+        <script type="module" src="./main2D.js"></script>
+        <script type="module" src="./app.js"></script>
+</body>
 </html>
+
