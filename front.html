@@ -13,13 +13,11 @@
             }
         }
         </script>
-    <title>Document</title>
+    <title>ASTEROID SIMULATOR</title>
 </head>
     <body>
-        <p id = "labels">
-            See the orbital visualisation of the fastest, closest or the largest NEO (Near Earth Object) approaching Earth on a chosen day in both 3D and 2D.
-        </p>
-        <label for="UserOption">Choose an Asteroid:</label>
+        <p id = "labels">pick a thing</p>
+        <label for="UserOption">Choose an option:</label>
         <select id = "UserOption">
             <option></option>
             <option value="fastest">Fastest</option>
@@ -34,7 +32,6 @@
         <button type="button" id="buttonAll">3D</button>
         
         <div id="neoInfo" class="info-box"></div>
-        
     <!-- getAPI is imported by app/main modules; avoid loading it twice as a top-level module -->
     <script type="module" src="./visualisation2D.js"></script>
     <script type="module" src="./main2D.js"></script>
