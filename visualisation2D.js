@@ -8,14 +8,15 @@ export class visualisation2D {
     perhelionEarth = 0.983290; //AU
     aEarth = 1.00000; //AU
     bEarth = 0.998987; //AU
-    windowCentreX = window.innerWidth/2-80;
-    windowCentreY = window.innerHeight/2-30;
+    windowCentreX = window.innerWidth/2 - 80;
+    windowCentreY = window.innerHeight/2 + 30;
     scaleLength = 100
     sunX = this.windowCentreX - (this.aEarth * this.scaleLength - this.perhelionEarth * this.scaleLength);
     sunY = this.windowCentreY;
 
     drawEarthOrbit(space) {
         space.beginPath();
+        space.strokeStyle = "white";
         space.ellipse(
             this.windowCentreX,
             this.windowCentreY,
@@ -65,7 +66,7 @@ export class visualisation2D {
 
         space.beginPath();
         space.setLineDash([4, 2]);
-        space.strokeStyle = "grey";
+        space.strokeStyle = "white";
 
         space.moveTo(this.sunX, this.sunY)
         space.lineTo(
@@ -82,14 +83,14 @@ export class visualisation2D {
 
     drawLegend(space) {
         const startX = 20;       
-        const startY = 20;       
+        const startY = 200;       
         const lineLength = 40;   
         const spacing = 25;      
         const textOffset = 10;   
 
         space.lineWidth = 1;     
         space.font = "12px Arial";
-        space.fillStyle = "black";
+        space.fillStyle = "white";
 
         // Hazardous NEO
         space.strokeStyle = "red";
@@ -108,7 +109,7 @@ export class visualisation2D {
         space.fillText("Safe NEO Orbit", startX + lineLength + textOffset, startY + spacing + 5);
 
         //Earth
-        space.strokeStyle = "black";
+        space.strokeStyle = "white";
         space.beginPath();
         space.moveTo(startX, startY + 2*spacing);
         space.lineTo(startX + lineLength, startY + 2*spacing);
@@ -116,7 +117,7 @@ export class visualisation2D {
         space.fillText("Earth", startX + lineLength + textOffset, startY + 2*spacing + 5);
 
         //MOID line
-        space.strokeStyle = "grey";
+        space.strokeStyle = "white";
         space.beginPath();
         space.setLineDash([4, 2]);
         space.lineWidth = 0.5;
@@ -134,7 +135,7 @@ export class visualisation2D {
         space.fillStyle = "orange";
         space.fill();
 
-        space.fillStyle = "black";
+        space.fillStyle = "white";
         space.moveTo(startX, startY + 4*spacing);
         space.fillText("Sun", startX + lineLength + textOffset, startY + 4*spacing + 5);
         space.stroke();
